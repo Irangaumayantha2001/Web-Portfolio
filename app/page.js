@@ -1,20 +1,27 @@
 "use client";
 import Terminal from "./components/Terminal";
 import { useState, useEffect } from "react";
+import useTypingSound from "./hooks/useTypingSound";
 
 export default function Home() {
   const [typedText, setTypedText] = useState("");
   const welcomeText = "> Welcome to Iranga Umayantha's Cybersecurity Portfolio";
+  const { play } = useTypingSound();
 
-  useEffect(() => {
-    let index = 0;
-    const typing = setInterval(() => {
+useEffect(() => {
+  let index = 0;
+  const typing = setInterval(() => {
+    if (index < welcomeText.length) {
       setTypedText((prev) => prev + welcomeText[index]);
+      play();
       index++;
-      if (index === welcomeText.length) clearInterval(typing);
-    }, 50);
-    return () => clearInterval(typing);
-  }, []);
+    } else {
+      clearInterval(typing);
+    }
+  }, 50);
+
+  return () => clearInterval(typing);
+}, []);
 
 
   return (
